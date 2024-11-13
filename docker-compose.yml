@@ -12,5 +12,7 @@ services:
       - "8188:8188"
     runtime: nvidia
     volumes:
-      - ./data/comfyui/output:/comfyui/output
-      - ./data/runpod-volume:/runpod-volume
+      - ./data/comfyui/output:/comfyui/output # TODO l'immagine ce la manderà in base64 
+      - ./data/models:/comfyui/models
+      - ./data/nodes:/comfyui/custom_nodes 
+      - ./data/workflows:/comfyui/workflows
