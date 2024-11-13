@@ -5,7 +5,25 @@
 3. Mount volumes and link into comfyui/models and comfyui/custom_nodes 
 4. Start
 
-**In Dockerfile set SERVE_API_LOCALLY=False before publish to live**
+**In Dockerfile set SERVE_API_LOCALLY=True for local development**
+
+## How to
+
+1. git clone https://github.com/getreica/runpod-worker-comfy.git
+2. sh 1_setup.sh
+
+Local build just running: 
+
+**1 step** Build with tag latest
+```
+docker build -t alexgenovese/template-comfyui-serverless
+```
+
+**2 step** Run local into docker with port forwarding
+```
+docker RUN -P alexgenovese/template-comfyui-serverless 8188:8188
+```
+
 
 
 ## Input structure 

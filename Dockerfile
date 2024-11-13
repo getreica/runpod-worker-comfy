@@ -8,7 +8,7 @@ ENV PIP_PREFER_BINARY=1
 # Ensures output from python is printed immediately to the terminal without buffering
 ENV PYTHONUNBUFFERED=1 
 
-ENV SERVE_API_LOCALLY=True
+ENV SERVE_API_LOCALLY=False
 
 # Install Python, git and other necessary tools
 RUN apt-get update && apt-get install -y \
@@ -58,4 +58,4 @@ VOLUME [ "./data/nodes", "/comfyui/custom_nodes" ]
 VOLUME [ "./data/workflows", "/comfyui/workflows" ]
 
 # Start the container
-CMD /start.sh
+CMD [ "/start.sh" ]
