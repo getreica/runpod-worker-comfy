@@ -1,4 +1,36 @@
-# runpod-worker-comfy
+# Runpod Comfyui Template Endpoint Serverless 
+
+1. Download ComfyUI
+2. Delete models, custom_nodes
+3. Mount volumes and link into comfyui/models and comfyui/custom_nodes 
+4. Start
+
+**In Dockerfile set SERVE_API_LOCALLY=False before publish to live**
+
+
+## Input structure 
+```
+{
+  "input": {
+    "webhook": {},
+    "images": [
+      {
+        "name": "example_image_name.png",
+        "image": "base64_encoded_string"
+      }
+    ],
+    "text": [
+      {
+        "input_name" : "value_name"
+      }
+    ]
+  }
+}
+
+```
+
+
+# ------ Template: runpod-worker-comfy
 
 > [ComfyUI](https://github.com/comfyanonymous/ComfyUI) as a serverless API on [RunPod](https://www.runpod.io/)
 
