@@ -3,7 +3,7 @@ version: "3.8"
 services:
   comfyui:
     image: timpietruskyblibla/runpod-worker-comfy:dev
-    container_name: comfyui-worker
+    container_name: template-comfyui-serverless
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - SERVE_API_LOCALLY=true
