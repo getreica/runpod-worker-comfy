@@ -62,22 +62,13 @@ ADD src/extra_model_paths.yaml ./
 WORKDIR /
 
 # Add the start and the handler
-ADD src/start.sh src/rp_handler.py test_input.json ./
+ADD src/start.sh src/rp_handler.py ./
+
+# Copy all folder
+COPY src/ ./
 
 # Run start 
 RUN chmod +x /start.sh 
 
-# Remove folder in comfyui
-RUN rm -rf /comfui/models 
-RUN rm -rf /comfui/custom_nodes 
-
-# Mount network volume 
-VOLUME [ "./data/models", "/comfyui/models" ]
-VOLUME [ "./data/nodes", "/comfyui/custom_nodes" ]
-
-# Mount network for workflows 
-VOLUME [ "./data/workflows", "/comfyui/workflows" ]
-
 # Start the container
-RUN chmod +x /start.sh
 ENTRYPOINT [ "/start.sh" ]

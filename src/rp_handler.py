@@ -370,7 +370,7 @@ def handler(job_input):
     
 
      # Read JSON object
-    workflow = json.load(os.path.join("/comfyui/workflows", workflow))
+    workflow = json.load(os.path.join("/src/workflows", workflow))
     # estrare tutti ino diche -> "class_type": "ComfyUIDeployExternalImage",
     # check if input_id == chiave presente nel json text 
     # se si, merge json con i nuovi valori 

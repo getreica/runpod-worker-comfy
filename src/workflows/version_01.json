@@ -1,0 +1,438 @@
+{
+    "1": {
+      "inputs": {
+        "model_name": "GroundingDINO_SwinB (938MB)"
+      },
+      "class_type": "GroundingDinoModelLoader (segment anything)",
+      "_meta": {
+        "title": "GroundingDinoModelLoader (segment anything)"
+      }
+    },
+    "2": {
+      "inputs": {
+        "prompt": "bag",
+        "threshold": 0.1,
+        "sam_model": [
+          "3",
+          0
+        ],
+        "grounding_dino_model": [
+          "1",
+          0
+        ],
+        "image": [
+          "72",
+          0
+        ]
+      },
+      "class_type": "GroundingDinoSAMSegment (segment anything)",
+      "_meta": {
+        "title": "GroundingDinoSAMSegment (segment anything)"
+      }
+    },
+    "3": {
+      "inputs": {
+        "model_name": "sam_vit_h (2.56GB)"
+      },
+      "class_type": "SAMModelLoader (segment anything)",
+      "_meta": {
+        "title": "SAMModelLoader (segment anything)"
+      }
+    },
+    "6": {
+      "inputs": {
+        "mask": [
+          "111",
+          0
+        ]
+      },
+      "class_type": "InvertMask (segment anything)",
+      "_meta": {
+        "title": "InvertMask (segment anything)"
+      }
+    },
+    "7": {
+      "inputs": {
+        "masks": [
+          "6",
+          0
+        ]
+      },
+      "class_type": "Convert Masks to Images",
+      "_meta": {
+        "title": "Convert Masks to Images"
+      }
+    },
+    "24": {
+      "inputs": {
+        "stop_at_clip_layer": -2,
+        "clip": [
+          "92",
+          1
+        ]
+      },
+      "class_type": "CLIPSetLastLayer",
+      "_meta": {
+        "title": "CLIP Set Last Layer"
+      }
+    },
+    "33": {
+      "inputs": {
+        "add_noise": "enable",
+        "noise_seed": [
+          "41",
+          0
+        ],
+        "steps": 30,
+        "cfg": 7,
+        "sampler_name": "dpmpp_2m_sde_gpu",
+        "scheduler": "karras",
+        "start_at_step": 0,
+        "end_at_step": 1000,
+        "return_with_leftover_noise": "enable",
+        "model": [
+          "92",
+          0
+        ],
+        "positive": [
+          "50",
+          0
+        ],
+        "negative": [
+          "50",
+          1
+        ],
+        "latent_image": [
+          "54",
+          0
+        ]
+      },
+      "class_type": "KSamplerAdvanced",
+      "_meta": {
+        "title": "KSampler (Advanced)"
+      }
+    },
+    "34": {
+      "inputs": {
+        "text": [
+          "107",
+          2
+        ],
+        "clip": [
+          "24",
+          0
+        ]
+      },
+      "class_type": "CLIPTextEncode",
+      "_meta": {
+        "title": "CLIP Text Encode (Prompt)"
+      }
+    },
+    "35": {
+      "inputs": {
+        "text": [
+          "107",
+          5
+        ],
+        "clip": [
+          "24",
+          0
+        ]
+      },
+      "class_type": "CLIPTextEncode",
+      "_meta": {
+        "title": "CLIP Text Encode (Prompt)"
+      }
+    },
+    "39": {
+      "inputs": {
+        "samples": [
+          "33",
+          0
+        ],
+        "vae": [
+          "92",
+          2
+        ]
+      },
+      "class_type": "VAEDecode",
+      "_meta": {
+        "title": "VAE Decode"
+      }
+    },
+    "41": {
+      "inputs": {
+        "seed": 978986606221431
+      },
+      "class_type": "Seed (rgthree)",
+      "_meta": {
+        "title": "Seed (rgthree)"
+      }
+    },
+    "50": {
+      "inputs": {
+        "strength": 0.85,
+        "start_percent": 0,
+        "end_percent": 0.8,
+        "positive": [
+          "34",
+          0
+        ],
+        "negative": [
+          "35",
+          0
+        ],
+        "control_net": [
+          "93",
+          0
+        ],
+        "image": [
+          "66",
+          0
+        ]
+      },
+      "class_type": "ControlNetApplyAdvanced",
+      "_meta": {
+        "title": "Apply ControlNet (Advanced)"
+      }
+    },
+    "54": {
+      "inputs": {
+        "grow_mask_by": 6,
+        "pixels": [
+          "2",
+          0
+        ],
+        "vae": [
+          "92",
+          2
+        ],
+        "mask": [
+          "6",
+          0
+        ]
+      },
+      "class_type": "VAEEncodeForInpaint",
+      "_meta": {
+        "title": "VAE Encode (for Inpainting)"
+      }
+    },
+    "66": {
+      "inputs": {
+        "enable_threshold": "false",
+        "threshold_low": 0.1,
+        "threshold_high": 0.3,
+        "images": [
+          "2",
+          0
+        ]
+      },
+      "class_type": "Image Canny Filter",
+      "_meta": {
+        "title": "Image Canny Filter"
+      }
+    },
+    "72": {
+      "inputs": {
+        "upscale_method": "nearest-exact",
+        "width": [
+          "77",
+          0
+        ],
+        "height": [
+          "77",
+          1
+        ],
+        "crop": "center",
+        "image": [
+          "94",
+          0
+        ]
+      },
+      "class_type": "ImageScale",
+      "_meta": {
+        "title": "Upscale Image"
+      }
+    },
+    "77": {
+      "inputs": {
+        "image": [
+          "94",
+          0
+        ]
+      },
+      "class_type": "CM_NearestSDXLResolution",
+      "_meta": {
+        "title": "NearestSDXLResolution"
+      }
+    },
+    "85": {
+      "inputs": {
+        "delimiter": " ",
+        "clean_whitespace": "true",
+        "text_a": "photo of ",
+        "text_b": "bag",
+        "text_c": "gradient light gray, soft light",
+        "text_d": ", intricate detail, 8k, RAW, masterpiece, soft light, realistic, ultra realistic"
+      },
+      "class_type": "Text Concatenate",
+      "_meta": {
+        "title": "Text Concatenate"
+      }
+    },
+    "92": {
+      "inputs": {
+        "ckpt_name": "reica_08_base.safetensors"
+      },
+      "class_type": "CheckpointLoaderSimple",
+      "_meta": {
+        "title": "Load Checkpoint"
+      }
+    },
+    "93": {
+      "inputs": {
+        "control_net_name": "control-lora-canny-rank256.safetensors"
+      },
+      "class_type": "ControlNetLoader",
+      "_meta": {
+        "title": "Load ControlNet Model"
+      }
+    },
+    "94": {
+      "inputs": {
+        "image": "bag 2 (2).jpg",
+        "upload": "image"
+      },
+      "class_type": "LoadImage",
+      "_meta": {
+        "title": "INPUT_IMAGE"
+      }
+    },
+    "101": {
+      "inputs": {
+        "upscale_by": 1.5,
+        "seed": 1073181399736871,
+        "steps": 30,
+        "cfg": 6.5,
+        "sampler_name": "dpmpp_2m_sde_gpu",
+        "scheduler": "karras",
+        "denoise": 0.3,
+        "mode_type": "Linear",
+        "tile_width": 512,
+        "tile_height": 512,
+        "mask_blur": 8,
+        "tile_padding": 32,
+        "seam_fix_mode": "None",
+        "seam_fix_denoise": 1,
+        "seam_fix_width": 64,
+        "seam_fix_mask_blur": 8,
+        "seam_fix_padding": 16,
+        "force_uniform_tiles": true,
+        "tiled_decode": false,
+        "image": [
+          "104",
+          0
+        ],
+        "model": [
+          "92",
+          0
+        ],
+        "positive": [
+          "50",
+          0
+        ],
+        "negative": [
+          "50",
+          1
+        ],
+        "vae": [
+          "92",
+          2
+        ],
+        "upscale_model": [
+          "103",
+          0
+        ]
+      },
+      "class_type": "UltimateSDUpscale",
+      "_meta": {
+        "title": "Ultimate SD Upscale"
+      }
+    },
+    "103": {
+      "inputs": {
+        "model_name": "RealESRGAN_x4plus.pth"
+      },
+      "class_type": "UpscaleModelLoader",
+      "_meta": {
+        "title": "Load Upscale Model"
+      }
+    },
+    "104": {
+      "inputs": {
+        "x": 0,
+        "y": 0,
+        "resize_source": false,
+        "destination": [
+          "39",
+          0
+        ],
+        "source": [
+          "72",
+          0
+        ],
+        "mask": [
+          "111",
+          0
+        ]
+      },
+      "class_type": "ImageCompositeMasked",
+      "_meta": {
+        "title": "ImageCompositeMasked"
+      }
+    },
+    "106": {
+      "inputs": {
+        "filename_prefix": "output",
+        "images": [
+          "101",
+          0
+        ]
+      },
+      "class_type": "SaveImage",
+      "_meta": {
+        "title": "Save Image"
+      }
+    },
+    "107": {
+      "inputs": {
+        "text_positive_g": [
+          "85",
+          0
+        ],
+        "text_positive_l": "realistic, ultra realistic, 8k, RAW",
+        "text_negative": "low quality",
+        "style": "ads-advertising",
+        "negative_prompt_to": "Both",
+        "copy_to_l": true,
+        "log_prompt": false
+      },
+      "class_type": "SDXLPromptStylerAdvanced",
+      "_meta": {
+        "title": "SDXL Prompt Styler Advanced"
+      }
+    },
+    "111": {
+      "inputs": {
+        "amount": 2,
+        "mask": [
+          "2",
+          1
+        ]
+      },
+      "class_type": "MaskBlur+",
+      "_meta": {
+        "title": "🔧 Mask Blur"
+      }
+    }
+  }
