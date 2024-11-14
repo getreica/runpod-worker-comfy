@@ -29,20 +29,17 @@ docker RUN -P alexgenovese/template-comfyui-serverless 8188:8188
 ## Input structure 
 ```
 {
-  "input": {
-    "webhook": {},
-    "images": [
-      {
-        "name": "example_image_name.png",
-        "image": "base64_encoded_string"
-      }
-    ],
-    "text": [
-      {
-        "input_name" : "value_name"
-      }
-    ]
-  }
+    "workflow" : "workflow_name/version_01.json",     # path to read from storage
+    "webhook": "https://webhooks.getreica.com",       # Endpoint
+    "request" :{
+        "image" : "https://",
+        "chiave_comfydeploy_image_nel_workflow" : 12,
+        "chiave_valore_intero" : 123,
+        "chiave_valore_testo" : "ciao",
+        "chiave_valore_float" : 23.50,
+        "chiave_image_batch" : [ "image.jpg", "asdcas.jpgg"],
+        "chiave_boolean" : false
+    }
 }
 
 ```
