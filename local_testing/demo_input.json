@@ -1,0 +1,12 @@
+{
+    "workflow" : "prompt/version_01.json",
+    "webhook": "",
+    "request" :{
+        "chiave_comfydeploy_image_nel_workflow" : "https://placehold.co/600x400",
+        "top" : 123,
+        "chiave_valore_testo" : "ciao",
+        "chiave_valore_float" : 23.50,
+        "chiave_image_batch" : [ "image.jpg", "asdcas.jpgg"],
+        "chiave_boolean" : false
+    }
+}
