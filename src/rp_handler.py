@@ -1,13 +1,11 @@
 import runpod
 from runpod.serverless.utils import rp_upload
-import json
+from runpod.serverless.modules.rp_logger import RunPodLogger
+import json, time, os, requests, base64
+from io import BytesIO
 import urllib.request
 import urllib.parse
-import time
-import os
-import requests
-import base64
-from io import BytesIO
+from urllib.parse import urlparse
 
 # Time to wait between API check attempts in milliseconds
 COMFY_API_AVAILABLE_INTERVAL_MS = 50
@@ -22,6 +20,8 @@ COMFY_HOST = "127.0.0.1:8188"
 # Enforce a clean state after each job is done
 # see https://docs.runpod.io/docs/handler-additional-controls#refresh-worker
 REFRESH_WORKER = os.environ.get("REFRESH_WORKER", "false").lower() == "true"
+
+logger = RunPodLogger()
 
 
 def validate_input(job_input):
@@ -49,21 +49,21 @@ def validate_input(job_input):
     # Validate 'workflow' in input
     workflow = job_input.get("workflow")
     if workflow is None:
-        return None, "Missing 'workflow' parameter"
+        return None, "Missing 'workflow' parameter" 
+    
+    # Check if file exists
+    workflow = os.path.join("/comfyui/workflows", workflow)
+    if not os.path.isfile(workflow):
+        return None, f"Missing 'workflow' file in storage ${workflow}" 
 
-    # Validate 'images' in input, if provided
-    images = job_input.get("images")
-    if images is not None:
-        if not isinstance(images, list) or not all(
-            "name" in image and "image" in image for image in images
-        ):
-            return (
-                None,
-                "'images' must be a list of objects with 'name' and 'image' keys",
-            )
+    # Validate request 
+    request = job_input.get("request")
+    
+    ## TODO validare il tipo per ogni valore delle chiavi
+
 
     # Return validated data and no error
-    return {"workflow": workflow, "images": images}, None
+    return job_input, None
 
 
 def check_server(url, retries=500, delay=50):
@@ -100,18 +100,34 @@ def check_server(url, retries=500, delay=50):
     return False
 
 
-def upload_images(images):
+def is_valid_url(url):
+    try:
+        result = urlparse(url)
+        return all([result.scheme, result.netloc])
+    except ValueError:
+        return False
+
+
+def upload_images(request):
     """
     Upload a list of base64 encoded images to the ComfyUI server using the /upload/image endpoint.
 
     Args:
-        images (list): A list of dictionaries, each containing the 'name' of the image and the 'image' as a base64 encoded string.
-        server_address (str): The address of the ComfyUI server.
+        request (json)
 
     Returns:
         list: A list of responses from the server for each image upload.
     """
-    if not images:
+    images = []
+    for key in request:
+        if type(request[key]) == str:
+            # print(f"{type(request[key])}")
+            if is_valid_url(request[key]):
+                print(f'Valid URL: {request[key]}')
+                images.append(request[key])
+
+
+    if len(images) == 0:
         return {"status": "success", "message": "No images to upload", "details": []}
 
     responses = []
@@ -120,9 +136,13 @@ def upload_images(images):
     print(f"runpod-worker-comfy - image(s) upload")
 
     for image in images:
-        name = image["name"]
-        image_data = image["image"]
-        blob = base64.b64decode(image_data)
+        # Get the file name
+        a = urlparse(image)
+        name = os.path.basename(a.path)
+
+        # Download the image
+        response = requests.get(image)
+        blob = BytesIO(response.content)
 
         # Prepare the form data
         files = {
@@ -273,7 +293,54 @@ def process_output_images(outputs, job_id):
         }
 
 
-def handler(job):
+# Check if the key exists in input request
+# return the value changed
+def change_value(value, input): 
+    key = value['inputs']['input_id']
+    
+    if key in input['request']: 
+        print(f"---> Changing value {key} in {input['request'][key]}  <----")
+        value['inputs']['default_value'] = input['request'][key]
+
+    # ritorna l'oggetto json aggiornato
+    return value
+                  
+
+# Filter and only the key that we need to change
+# Change the value of the key that match into input keys
+def merge_values(values, input): 
+    for value in values:
+        # Currently using Comfydeploy module: https://github.com/BennyKok/comfyui-deploy/blob/main/comfy-nodes/external_boolean.py
+        key_to_check = value['class_type']
+        if key_to_check == "ComfyUIDeployExternalText":          
+            value = change_value(value, input)
+        if key_to_check == "ComfyUIDeployExternalTextAny":          
+            value = change_value(value, input)
+        if key_to_check == "ComfyUIDeployExternalImage":           # Legge sia URL che local Path 
+            value = change_value(value, input)
+        elif key_to_check == "ComfyUIDeployExternalNumberInt":      
+            value = change_value(value, input)
+        elif key_to_check == "ComfyUIDeployExternalNumber":         
+            value = change_value(value, input)
+        elif key_to_check == "ComfyUIDeployExternalLora":            
+            value = change_value(value, input)
+        elif key_to_check == "ComfyUIDeployExternalImageBatch":
+            value = change_value(value, input)
+        elif key_to_check == "ComfyUIDeployExternalImageAlpha":
+            value = change_value(value, input)
+        elif key_to_check == "ComfyUIDeployExternalFaceModel":
+            value = change_value(value, input)
+        elif key_to_check == "ComfyUIDeployExternalVideo":
+            value = change_value(value, input)
+        elif key_to_check == "ComfyUIDeployExternalCheckpoint":
+            value = change_value(value, input)
+        elif key_to_check == "ComfyUIDeployExternalBoolean":
+            value = change_value(value, input)
+    
+    return values
+
+
+def handler(job_input):
     """
     The main function that handles a job of generating an image.
 
@@ -286,7 +353,6 @@ def handler(job):
     Returns:
         dict: A dictionary containing either an error message or a success status with generated images.
     """
-    job_input = job["input"]
 
     # Make sure that the input is valid
     validated_data, error_message = validate_input(job_input)
@@ -294,21 +360,23 @@ def handler(job):
         return {"error": error_message}
 
     # Extract validated data
-    workflow = validated_data["workflow"]
-    images = validated_data.get("images")
-
-    # Make sure that the ComfyUI API is available
-    check_server(
-        f"http://{COMFY_HOST}",
-        COMFY_API_AVAILABLE_MAX_RETRIES,
-        COMFY_API_AVAILABLE_INTERVAL_MS,
-    )
-
+    workflow = validated_data.get("workflow") # json object 
+    request = validated_data.get("request") # json 
+    
     # Upload images if they exist
-    upload_result = upload_images(images)
-
+    upload_result = upload_images(request)
     if upload_result["status"] == "error":
         return upload_result
+    
+
+     # Read JSON object
+    workflow = json.load(os.path.join("/comfyui/workflows", workflow))
+    # estrare tutti ino diche -> "class_type": "ComfyUIDeployExternalImage",
+    # check if input_id == chiave presente nel json text 
+    # se si, merge json con i nuovi valori 
+    values = workflow.values()
+    workflow = merge_values(values, workflow)
+
 
     # Queue the workflow
     try:
@@ -347,4 +415,15 @@ def handler(job):
 
 # Start the handler only if this script is run directly
 if __name__ == "__main__":
-    runpod.serverless.start({"handler": handler})
+    # Make sure that the ComfyUI API is available
+    check_server(
+        f"http://{COMFY_HOST}",
+        COMFY_API_AVAILABLE_MAX_RETRIES,
+        COMFY_API_AVAILABLE_INTERVAL_MS,
+    )
+    logger.info('ComfyUI API is ready')
+    logger.info('Starting RunPod Serverless...')
+    runpod.serverless.start({
+        "handler": handler,
+        # "return_aggregate_stream": True,  # Optional: Aggregate results are accessible via /run endpoint
+    })
