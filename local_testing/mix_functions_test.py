@@ -41,7 +41,7 @@ get_images(input)
 #
 #       WORKFLOW in STORAGE
 #
-with open('../data/workflows/prompt/version_01.json') as fp:
+with open('../src/workflows/version_01.json') as fp:
     workflow = json.load(fp)
 
 # Check if the key exists in input request

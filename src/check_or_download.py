@@ -26,7 +26,7 @@ class WeightsDownloadCache:
         self.BASE_WEIGHT_FOLDER = base_dir + '/models'
         self.BASE_NODES_FOLDER = base_dir + '/custom_nodes'
 
-        # TODO - Env variables
+        # Env variables
         self.hf_account = os.environ.get("HF_ACCOUNT", "alexgenovese")
         self.hf_token = os.environ.get("HF_TOKEN", "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")
         self.version = os.environ.get("VERSION", version)
