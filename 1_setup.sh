@@ -12,7 +12,7 @@ fi
 
 # Create folders 
 if ! [ -d "$DIRECTORY" ]; then
-    mkdir ./data/models
-    mkdir ./data/nodes
-    mkdir ./data/workflows
+    mkdir ./runpod-volume/models
+    mkdir ./runpod-volume/nodes
+    mkdir ./runpod-volume/workflows
 fi

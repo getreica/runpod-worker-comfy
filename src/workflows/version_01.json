@@ -1,438 +1,496 @@
 {
-    "1": {
-      "inputs": {
-        "model_name": "GroundingDINO_SwinB (938MB)"
-      },
-      "class_type": "GroundingDinoModelLoader (segment anything)",
-      "_meta": {
-        "title": "GroundingDinoModelLoader (segment anything)"
-      }
+  "12": {
+    "inputs": {
+      "image": "face_00001_.png",
+      "upload": "image"
     },
-    "2": {
-      "inputs": {
-        "prompt": "bag",
-        "threshold": 0.1,
-        "sam_model": [
-          "3",
-          0
-        ],
-        "grounding_dino_model": [
-          "1",
-          0
-        ],
-        "image": [
-          "72",
-          0
-        ]
-      },
-      "class_type": "GroundingDinoSAMSegment (segment anything)",
-      "_meta": {
-        "title": "GroundingDinoSAMSegment (segment anything)"
-      }
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image (Face)"
+    }
+  },
+  "75": {
+    "inputs": {
+      "unet_name": "flux1-dev-Q8_0.gguf"
     },
-    "3": {
-      "inputs": {
-        "model_name": "sam_vit_h (2.56GB)"
-      },
-      "class_type": "SAMModelLoader (segment anything)",
-      "_meta": {
-        "title": "SAMModelLoader (segment anything)"
-      }
+    "class_type": "UnetLoaderGGUF",
+    "_meta": {
+      "title": "Unet Loader (GGUF)"
+    }
+  },
+  "76": {
+    "inputs": {
+      "clip_name1": "t5-v1_1-xxl-encoder-Q8_0.gguf",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
     },
-    "6": {
-      "inputs": {
-        "mask": [
-          "111",
-          0
-        ]
-      },
-      "class_type": "InvertMask (segment anything)",
-      "_meta": {
-        "title": "InvertMask (segment anything)"
-      }
+    "class_type": "DualCLIPLoaderGGUF",
+    "_meta": {
+      "title": "DualCLIPLoader (GGUF)"
+    }
+  },
+  "77": {
+    "inputs": {
+      "vae_name": "ae.sft"
     },
-    "7": {
-      "inputs": {
-        "masks": [
-          "6",
-          0
-        ]
-      },
-      "class_type": "Convert Masks to Images",
-      "_meta": {
-        "title": "Convert Masks to Images"
-      }
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "80": {
+    "inputs": {
+      "weight": 1,
+      "start_at": 0,
+      "end_at": 1,
+      "fusion": "mean",
+      "fusion_weight_max": 1,
+      "fusion_weight_min": 0,
+      "train_step": 3000,
+      "use_gray": true,
+      "pulid_flux": [
+        "81",
+        0
+      ],
+      "eva_clip": [
+        "82",
+        0
+      ],
+      "face_analysis": [
+        "83",
+        0
+      ],
+      "image": [
+        "170",
+        0
+      ],
+      "model": [
+        "75",
+        0
+      ]
     },
-    "24": {
-      "inputs": {
-        "stop_at_clip_layer": -2,
-        "clip": [
-          "92",
-          1
-        ]
-      },
-      "class_type": "CLIPSetLastLayer",
-      "_meta": {
-        "title": "CLIP Set Last Layer"
-      }
+    "class_type": "ApplyPulidFlux",
+    "_meta": {
+      "title": "Apply PuLID Flux"
+    }
+  },
+  "81": {
+    "inputs": {
+      "pulid_file": "pulid_flux_v0.9.0.safetensors"
     },
-    "33": {
-      "inputs": {
-        "add_noise": "enable",
-        "noise_seed": [
-          "41",
-          0
-        ],
-        "steps": 30,
-        "cfg": 7,
-        "sampler_name": "dpmpp_2m_sde_gpu",
-        "scheduler": "karras",
-        "start_at_step": 0,
-        "end_at_step": 1000,
-        "return_with_leftover_noise": "enable",
-        "model": [
-          "92",
-          0
-        ],
-        "positive": [
-          "50",
-          0
-        ],
-        "negative": [
-          "50",
-          1
-        ],
-        "latent_image": [
-          "54",
-          0
-        ]
-      },
-      "class_type": "KSamplerAdvanced",
-      "_meta": {
-        "title": "KSampler (Advanced)"
-      }
+    "class_type": "PulidFluxModelLoader",
+    "_meta": {
+      "title": "Load PuLID Flux Model"
+    }
+  },
+  "82": {
+    "inputs": {},
+    "class_type": "PulidFluxEvaClipLoader",
+    "_meta": {
+      "title": "Load Eva Clip (PuLID Flux)"
+    }
+  },
+  "83": {
+    "inputs": {
+      "provider": "CUDA"
     },
-    "34": {
-      "inputs": {
-        "text": [
-          "107",
-          2
-        ],
-        "clip": [
-          "24",
-          0
-        ]
-      },
-      "class_type": "CLIPTextEncode",
-      "_meta": {
-        "title": "CLIP Text Encode (Prompt)"
-      }
+    "class_type": "PulidFluxInsightFaceLoader",
+    "_meta": {
+      "title": "Load InsightFace (PuLID Flux)"
+    }
+  },
+  "128": {
+    "inputs": {
+      "images": [
+        "170",
+        0
+      ]
     },
-    "35": {
-      "inputs": {
-        "text": [
-          "107",
-          5
-        ],
-        "clip": [
-          "24",
-          0
-        ]
-      },
-      "class_type": "CLIPTextEncode",
-      "_meta": {
-        "title": "CLIP Text Encode (Prompt)"
-      }
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "141": {
+    "inputs": {
+      "face": true,
+      "hair": false,
+      "body": false,
+      "clothes": false,
+      "accessories": false,
+      "background": false,
+      "confidence": 0.3,
+      "detail_method": "VITMatte(local)",
+      "detail_erode": 6,
+      "detail_dilate": 6,
+      "black_point": 0.01,
+      "white_point": 0.99,
+      "process_detail": true,
+      "device": "cpu",
+      "max_megapixels": 2,
+      "images": [
+        "12",
+        0
+      ]
     },
-    "39": {
-      "inputs": {
-        "samples": [
-          "33",
-          0
-        ],
-        "vae": [
-          "92",
-          2
-        ]
-      },
-      "class_type": "VAEDecode",
-      "_meta": {
-        "title": "VAE Decode"
-      }
+    "class_type": "LayerMask: PersonMaskUltra V2",
+    "_meta": {
+      "title": "LayerMask: PersonMaskUltra V2"
+    }
+  },
+  "142": {
+    "inputs": {
+      "padding": 20,
+      "blur": 0,
+      "mask": [
+        "141",
+        1
+      ],
+      "image_optional": [
+        "141",
+        0
+      ]
     },
-    "41": {
-      "inputs": {
-        "seed": 978986606221431
-      },
-      "class_type": "Seed (rgthree)",
-      "_meta": {
-        "title": "Seed (rgthree)"
-      }
+    "class_type": "MaskBoundingBox+",
+    "_meta": {
+      "title": "🔧 Mask Bounding Box"
+    }
+  },
+  "147": {
+    "inputs": {
+      "samples": [
+        "153",
+        0
+      ],
+      "vae": [
+        "77",
+        0
+      ]
     },
-    "50": {
-      "inputs": {
-        "strength": 0.85,
-        "start_percent": 0,
-        "end_percent": 0.8,
-        "positive": [
-          "34",
-          0
-        ],
-        "negative": [
-          "35",
-          0
-        ],
-        "control_net": [
-          "93",
-          0
-        ],
-        "image": [
-          "66",
-          0
-        ]
-      },
-      "class_type": "ControlNetApplyAdvanced",
-      "_meta": {
-        "title": "Apply ControlNet (Advanced)"
-      }
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "152": {
+    "inputs": {
+      "clip_l": "female model, long black hair, fair smooth skin, slim body, wearing a light-colored round-neck tank top with a straight hem tucked neatly into her pants, autumn-winter style, minimalistic design, seamless fabric, no lace, no decorations, front view, upper body from head to waist, bright cool lighting, clean minimalistic studio background, soft shadows, casual pose",
+      "t5xxl": "female model, long black hair, fair smooth skin, slim body, wearing a light-colored round-neck tank top with a straight hem tucked neatly into her pants, autumn-winter style, minimalistic design, seamless fabric, no lace, no decorations, front view, upper body from head to waist, bright cool lighting, clean minimalistic studio background, soft shadows, casual pose",
+      "guidance": 3.5,
+      "clip": [
+        "76",
+        0
+      ]
     },
-    "54": {
-      "inputs": {
-        "grow_mask_by": 6,
-        "pixels": [
-          "2",
-          0
-        ],
-        "vae": [
-          "92",
-          2
-        ],
-        "mask": [
-          "6",
-          0
-        ]
-      },
-      "class_type": "VAEEncodeForInpaint",
-      "_meta": {
-        "title": "VAE Encode (for Inpainting)"
-      }
+    "class_type": "CLIPTextEncodeFlux",
+    "_meta": {
+      "title": "CLIPTextEncodeFlux"
+    }
+  },
+  "153": {
+    "inputs": {
+      "noise": [
+        "154",
+        0
+      ],
+      "guider": [
+        "155",
+        0
+      ],
+      "sampler": [
+        "156",
+        0
+      ],
+      "sigmas": [
+        "160",
+        0
+      ],
+      "latent_image": [
+        "162",
+        0
+      ]
     },
-    "66": {
-      "inputs": {
-        "enable_threshold": "false",
-        "threshold_low": 0.1,
-        "threshold_high": 0.3,
-        "images": [
-          "2",
-          0
-        ]
-      },
-      "class_type": "Image Canny Filter",
-      "_meta": {
-        "title": "Image Canny Filter"
-      }
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "154": {
+    "inputs": {
+      "noise_seed": 0
     },
-    "72": {
-      "inputs": {
-        "upscale_method": "nearest-exact",
-        "width": [
-          "77",
-          0
-        ],
-        "height": [
-          "77",
-          1
-        ],
-        "crop": "center",
-        "image": [
-          "94",
-          0
-        ]
-      },
-      "class_type": "ImageScale",
-      "_meta": {
-        "title": "Upscale Image"
-      }
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "155": {
+    "inputs": {
+      "conditioning": [
+        "180",
+        0
+      ],
+      "model": [
+        "75",
+        0
+      ]
     },
-    "77": {
-      "inputs": {
-        "image": [
-          "94",
-          0
-        ]
-      },
-      "class_type": "CM_NearestSDXLResolution",
-      "_meta": {
-        "title": "NearestSDXLResolution"
-      }
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "BasicGuider"
+    }
+  },
+  "156": {
+    "inputs": {
+      "sampler_name": "ddim"
     },
-    "85": {
-      "inputs": {
-        "delimiter": " ",
-        "clean_whitespace": "true",
-        "text_a": "photo of ",
-        "text_b": "bag",
-        "text_c": "gradient light gray, soft light",
-        "text_d": ", intricate detail, 8k, RAW, masterpiece, soft light, realistic, ultra realistic"
-      },
-      "class_type": "Text Concatenate",
-      "_meta": {
-        "title": "Text Concatenate"
-      }
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "158": {
+    "inputs": {
+      "scheduler": "ddim_uniform",
+      "steps": 20,
+      "denoise": 1,
+      "model": [
+        "159",
+        0
+      ]
     },
-    "92": {
-      "inputs": {
-        "ckpt_name": "reica_08_base.safetensors"
-      },
-      "class_type": "CheckpointLoaderSimple",
-      "_meta": {
-        "title": "Load Checkpoint"
-      }
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "159": {
+    "inputs": {
+      "max_shift": 1.15,
+      "base_shift": 0.5,
+      "width": 512,
+      "height": 512,
+      "model": [
+        "80",
+        0
+      ]
     },
-    "93": {
-      "inputs": {
-        "control_net_name": "control-lora-canny-rank256.safetensors"
-      },
-      "class_type": "ControlNetLoader",
-      "_meta": {
-        "title": "Load ControlNet Model"
-      }
+    "class_type": "ModelSamplingFlux",
+    "_meta": {
+      "title": "ModelSamplingFlux"
+    }
+  },
+  "160": {
+    "inputs": {
+      "factor": 0.9500000000000001,
+      "sigmas": [
+        "158",
+        0
+      ]
     },
-    "94": {
-      "inputs": {
-        "image": "bag 2 (2).jpg",
-        "upload": "image"
-      },
-      "class_type": "LoadImage",
-      "_meta": {
-        "title": "INPUT_IMAGE"
-      }
+    "class_type": "Multiply sigmas",
+    "_meta": {
+      "title": "Multiply sigmas"
+    }
+  },
+  "162": {
+    "inputs": {
+      "resolution": "768x1280 (0.6)",
+      "batch_size": 1,
+      "width_override": 0,
+      "height_override": 0
     },
-    "101": {
-      "inputs": {
-        "upscale_by": 1.5,
-        "seed": 1073181399736871,
-        "steps": 30,
-        "cfg": 6.5,
-        "sampler_name": "dpmpp_2m_sde_gpu",
-        "scheduler": "karras",
-        "denoise": 0.3,
-        "mode_type": "Linear",
-        "tile_width": 512,
-        "tile_height": 512,
-        "mask_blur": 8,
-        "tile_padding": 32,
-        "seam_fix_mode": "None",
-        "seam_fix_denoise": 1,
-        "seam_fix_width": 64,
-        "seam_fix_mask_blur": 8,
-        "seam_fix_padding": 16,
-        "force_uniform_tiles": true,
-        "tiled_decode": false,
-        "image": [
-          "104",
-          0
-        ],
-        "model": [
-          "92",
-          0
-        ],
-        "positive": [
-          "50",
-          0
-        ],
-        "negative": [
-          "50",
-          1
-        ],
-        "vae": [
-          "92",
-          2
-        ],
-        "upscale_model": [
-          "103",
-          0
-        ]
-      },
-      "class_type": "UltimateSDUpscale",
-      "_meta": {
-        "title": "Ultimate SD Upscale"
-      }
+    "class_type": "SDXLEmptyLatentSizePicker+",
+    "_meta": {
+      "title": "🔧 Empty Latent Size Picker"
+    }
+  },
+  "167": {
+    "inputs": {
+      "enabled": true,
+      "swap_model": "inswapper_128.onnx",
+      "facedetection": "YOLOv5n",
+      "face_restore_model": "RestoreFormer_PP.onnx",
+      "face_restore_visibility": 1,
+      "codeformer_weight": 0.5,
+      "detect_gender_input": "no",
+      "detect_gender_source": "no",
+      "input_faces_index": "0",
+      "source_faces_index": "0",
+      "console_log_level": 1,
+      "input_image": [
+        "147",
+        0
+      ],
+      "source_image": [
+        "170",
+        0
+      ],
+      "face_boost": [
+        "176",
+        0
+      ]
     },
-    "103": {
-      "inputs": {
-        "model_name": "RealESRGAN_x4plus.pth"
-      },
-      "class_type": "UpscaleModelLoader",
-      "_meta": {
-        "title": "Load Upscale Model"
-      }
+    "class_type": "ReActorFaceSwap",
+    "_meta": {
+      "title": "ReActor 🌌 Fast Face Swap"
+    }
+  },
+  "170": {
+    "inputs": {
+      "width": 768,
+      "height": 768,
+      "interpolation": "lanczos",
+      "method": "keep proportion",
+      "condition": "always",
+      "multiple_of": 0,
+      "image": [
+        "142",
+        1
+      ]
     },
-    "104": {
-      "inputs": {
-        "x": 0,
-        "y": 0,
-        "resize_source": false,
-        "destination": [
-          "39",
-          0
-        ],
-        "source": [
-          "72",
-          0
-        ],
-        "mask": [
-          "111",
-          0
-        ]
-      },
-      "class_type": "ImageCompositeMasked",
-      "_meta": {
-        "title": "ImageCompositeMasked"
-      }
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  },
+  "176": {
+    "inputs": {
+      "enabled": true,
+      "boost_model": "RestoreFormer_PP.onnx",
+      "interpolation": "Bicubic",
+      "visibility": 1,
+      "codeformer_weight": 0.5,
+      "restore_with_main_after": false
     },
-    "106": {
-      "inputs": {
-        "filename_prefix": "output",
-        "images": [
-          "101",
-          0
-        ]
-      },
-      "class_type": "SaveImage",
-      "_meta": {
-        "title": "Save Image"
-      }
+    "class_type": "ReActorFaceBoost",
+    "_meta": {
+      "title": "ReActor 🌌 Face Booster"
+    }
+  },
+  "180": {
+    "inputs": {
+      "strength": 1,
+      "start_percent": 0,
+      "end_percent": 1,
+      "positive": [
+        "152",
+        0
+      ],
+      "negative": [
+        "183",
+        0
+      ],
+      "control_net": [
+        "181",
+        0
+      ],
+      "image": [
+        "186",
+        0
+      ],
+      "vae": [
+        "77",
+        0
+      ]
     },
-    "107": {
-      "inputs": {
-        "text_positive_g": [
-          "85",
-          0
-        ],
-        "text_positive_l": "realistic, ultra realistic, 8k, RAW",
-        "text_negative": "low quality",
-        "style": "ads-advertising",
-        "negative_prompt_to": "Both",
-        "copy_to_l": true,
-        "log_prompt": false
-      },
-      "class_type": "SDXLPromptStylerAdvanced",
-      "_meta": {
-        "title": "SDXL Prompt Styler Advanced"
-      }
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "181": {
+    "inputs": {
+      "type": "openpose",
+      "control_net": [
+        "182",
+        0
+      ]
     },
-    "111": {
-      "inputs": {
-        "amount": 2,
-        "mask": [
-          "2",
-          1
-        ]
-      },
-      "class_type": "MaskBlur+",
-      "_meta": {
-        "title": "🔧 Mask Blur"
-      }
+    "class_type": "SetUnionControlNetType",
+    "_meta": {
+      "title": "SetUnionControlNetType"
+    }
+  },
+  "182": {
+    "inputs": {
+      "control_net_name": "shakker_controlnet_union_pro.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "183": {
+    "inputs": {
+      "conditioning": [
+        "152",
+        0
+      ]
+    },
+    "class_type": "ConditioningZeroOut",
+    "_meta": {
+      "title": "ConditioningZeroOut"
+    }
+  },
+  "184": {
+    "inputs": {
+      "image": "00004-2613900802.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image (Pose)"
+    }
+  },
+  "186": {
+    "inputs": {
+      "detect_hand": "enable",
+      "detect_body": "enable",
+      "detect_face": "enable",
+      "resolution": 1024,
+      "scale_stick_for_xinsr_cn": "disable",
+      "image": [
+        "184",
+        0
+      ]
+    },
+    "class_type": "OpenposePreprocessor",
+    "_meta": {
+      "title": "OpenPose Pose"
+    }
+  },
+  "189": {
+    "inputs": {
+      "filename_prefix": "output",
+      "images": [
+        "167",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "190": {
+    "inputs": {
+      "MODEL": [
+        "75",
+        0
+      ],
+      "CLIP": [
+        "76",
+        0
+      ],
+      "VAE": [
+        "77",
+        0
+      ]
+    },
+    "class_type": "Anything Everywhere3",
+    "_meta": {
+      "title": "Anything Everywhere3"
     }
   }
+}

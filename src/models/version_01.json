@@ -1,30 +1,8 @@
 {
-    "checkpoints" : [
-        {
-            "url" : "https://huggingface.co/alexgenovese/reica_models/resolve/main/reica_08_base.safetensors",
-            "filename" : "reica_08_base.safetensors"
-        }
-    ],
-    "controlnet" : [
-        {
-            "url" : "https://huggingface.co/stabilityai/control-lora/resolve/main/control-LoRAs-rank256/control-lora-canny-rank256.safetensors?download=true",
-            "filename" : "control-lora-canny-rank256.safetensors"
-        }
-    ],
     "upscale" : [
         {
             "url" : "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth",
             "filename" : "RealESRGAN_x4plus.pth"
-        }
-    ],
-    "grounding-dino": [
-        {
-            "url" : "https://huggingface.co/ShilongLiu/GroundingDINO/resolve/main/GroundingDINO_SwinB.cfg.py",
-            "filename" : "GroundingDINO_SwinB.cfg.py"
-        },
-        {
-            "url" : "https://huggingface.co/ShilongLiu/GroundingDINO/resolve/main/groundingdino_swinb_cogcoor.pth",
-            "filename" : "groundingdino_swinb_cogcoor.pth"
         }
     ],
     "sams" : [

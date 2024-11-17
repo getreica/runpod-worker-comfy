@@ -29,8 +29,8 @@ docker RUN -P alexgenovese/template-comfyui-serverless 8188:8188
 ## Input structure 
 ```
 {
-    "workflow" : "version_01.json",     # path to read from storage
-    "webhook": "https://webhooks.getreica.com",       # Endpoint
+    "workflow" : "prompt/version_01.json",                   # path to read from storage
+    "webhook": "https://webhooks.getreica.com",              # Endpoint
     "request" :{
         "image" : "https://",
         "chiave_comfydeploy_image_nel_workflow" : 12,

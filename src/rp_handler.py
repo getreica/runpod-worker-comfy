@@ -21,6 +21,7 @@ COMFY_HOST = "127.0.0.1:8188"
 # see https://docs.runpod.io/docs/handler-additional-controls#refresh-worker
 REFRESH_WORKER = os.environ.get("REFRESH_WORKER", "false").lower() == "true"
 
+
 logger = RunPodLogger()
 
 
@@ -405,8 +406,9 @@ def handler(job_input):
     except Exception as e:
         return {"error": f"Error waiting for image generation: {str(e)}"}
 
-    # Get the generated image and return it as URL in an AWS bucket or as base64
-    images_result = process_output_images(history[prompt_id].get("outputs"), job["id"])
+    # Get the generated image and return it as URL in an AWS bucket or as base64 
+    # TODO job id al posto del prompt id
+    images_result = process_output_images(history[prompt_id].get("outputs"), prompt_id)
 
     result = {**images_result, "refresh_worker": REFRESH_WORKER}
 

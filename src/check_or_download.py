@@ -5,7 +5,7 @@ from huggingface_hub import hf_hub_download, login
 
 class WeightsDownloadCache:
     def __init__(
-        self, min_disk_free: int = 10 * (2**30), base_dir: str = "/comfyui/models", version = '01'
+        self, min_disk_free: int = 10 * (2**30), base_dir: str = "/comfyui", version = '01'
     ):
         """
         WeightsDownloadCache is meant to track and download weights files as fast
@@ -23,18 +23,8 @@ class WeightsDownloadCache:
         self.base_dir = base_dir
         self._hits = 0
         self._misses = 0
-        self.BASE_WEIGHT_FOLDER = "/comfyui/models"
-        self.UPSCALE_FOLDER = "/comfyui/models/upscale_models"
-        self.CHECKPOINT_FOLDER = "/comfyui/models/checkpoints"
-        self.LORA_FOLDER = "/comfyui/models/loras"
-        self.DINO_FOLDER = "/comfyui/models/grounding-dino"
-        self.CONTROLNET_FOLDER = "/comfyui/models/controlnet"
-        self.SAMS_FOLDER = "/comfyui/models/sams"
-        self.EMBEDDINGS_FOLDER = "/comfyui/models/embeddings"
-        self.BLIP_FOLDER = "/comfyui/models/blip/checkpoints"
-        self.STYLE_MODELS = "/comfyui/models/style_models"
-        self.IP_ADAPTERS = "/comfyui/models/ipadapter"
-        self.CLIP_VISION = "/comfyui/models/clip_vision"
+        self.BASE_WEIGHT_FOLDER = base_dir + '/models'
+        self.BASE_NODES_FOLDER = base_dir + '/custom_nodes'
 
         # TODO - Env variables
         self.hf_account = os.environ.get("HF_ACCOUNT", "alexgenovese")
@@ -117,7 +107,6 @@ class WeightsDownloadCache:
         return os.path.join(self.base_dir, short_hash)
 
     
-    
     def download_weights(self, url: str, dest: str) -> None:
         """
         Download weights file from a URL, ensuring there's enough disk space.
@@ -146,26 +135,29 @@ class WeightsDownloadCache:
 
     # Download ComfyUI and modules
     def download_custom_nodes(self):
+        print("------------------ START DOWNLOADING MODULE ----------------- ")
         MODULES = ''
         # Read weights library 
         with open(f'/src/custom_nodes/version_{self.version}.json') as fp:
             MODULES = json.load(fp)
         
-        print("-------------> Start downloading modules")
         modules_array = MODULES['modules']
 
         for module in modules_array:
             folder_name = os.path.split(module['github_url'])[1]
 
-            if not os.path.exists(f"/comfyui/custom_nodes/{folder_name}"):
+            if not os.path.exists(f"{self.BASE_NODES_FOLDER}/{folder_name}"):
                 print(f"Download {module['github_url']} in {folder_name}")
                 # Update with hash: git clone --single-branch --branch <commit-hash> https://github.com/username/repository.git
-                os.system(f"git clone --recurse-submodules {module['github_url']} ComfyUI/custom_nodes/{folder_name}")
-                os.system(f"pip install -r ComfyUI/custom_nodes/{folder_name}/requirements.txt")
+                os.system(f"git clone --recurse-submodules {module['github_url']} {self.BASE_NODES_FOLDER}/{folder_name}")
+                if os.path.isfile(f"{self.BASE_NODES_FOLDER}/{folder_name}/requirements.txt"):
+                    os.system(f"pip install -r {self.BASE_NODES_FOLDER}/{folder_name}/requirements.txt")
     
-    
+        print("------------------ END DOWNLOADING MODULE ----------------- ")
+
     # Check or Download Weight
     def download_weights(self) -> None: 
+        print("------------------ START DOWNLOADING WEIGHTS ----------------- ")
         WEIGHTS = ''
         # Read weights library 
         with open(f'/src/models/version_{self.version}.json') as fp:
@@ -210,7 +202,7 @@ class WeightsDownloadCache:
                                 'local_dir' : folder_path
                             }
                         )
-                  
+            print("------------------ END DOWNLOADING WEIGHTS ----------------- ")
 
         except Exception as error:
              print("-> download_weights_lib | Exception: ", error)
@@ -251,10 +243,12 @@ class WeightsDownloadCache:
             raise Exception("No url passed")
         
         repo_path = urlparse(hf_url).path
-        repo_path = repo_path.rsplit("/", 4)[:1]
+        repo_path = repo_path.rsplit("/", 3)[:1]
         repo_path = repo_path[0][1:]
         
         return repo_path
+
+
 
 if __name__ == "__main__":
     # TODO add into Env variables
