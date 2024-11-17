@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_PREFER_BINARY=True
 # Faster transfer of models from the hub to the container
 ENV HF_HUB_ENABLE_HF_TRANSFER="1"
-# NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_VISIBLE_DEVICES=all
 
 # ---------------------------------------------------------------------------- #
 #                         Stage 2: Mount Volume, Add & Update                  #
@@ -57,12 +57,6 @@ RUN ln -sf /usr/bin/python3.10 /usr/bin/python
 # Install pip drop-in replacement uv (https://github.com/astral-sh/uv)
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Install necessary Python packages
-COPY requirements.txt /requirements.txt
-RUN pip install --upgrade --no-cache-dir pip && \
-    pip install --upgrade --no-cache-dir -r /requirements.txt && \
-    rm /requirements.txt
-
 
 # ---------------------------------------------------------------------------- #
 #                         Stage 3: ComfyUI & Add Pip Modules                   #
@@ -77,6 +71,12 @@ WORKDIR /comfyui
 # Install ComfyUI dependencies
 RUN pip3 install --upgrade --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 \
     && pip3 install --upgrade -r requirements.txt
+
+# Install necessary Python packages
+COPY requirements.txt /requirements.txt
+RUN pip install --upgrade --no-cache-dir pip && \
+    pip install --upgrade --no-cache-dir -r /requirements.txt && \
+    rm /requirements.txt
 
 # Install Worker dependencies
 RUN pip install requests runpod huggingface_hub
