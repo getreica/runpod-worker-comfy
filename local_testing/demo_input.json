@@ -1,5 +1,4 @@
 {
-    "workflow" : "prompt/version_01.json",
     "webhook": "",
     "request" :{
         "chiave_comfydeploy_image_nel_workflow" : "https://placehold.co/600x400",
