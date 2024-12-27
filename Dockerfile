@@ -46,16 +46,16 @@ ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
 RUN chmod +x /start.sh /restore_snapshot.sh
 
 # Optionally copy the snapshot file
-ADD snapshots/*snapshot*.json /snapshots/
+# ADD snapshots/*snapshot*.json /snapshots/
 
 # Restore the snapshot to install custom nodes
-RUN /restore_snapshot.sh
+# RUN /restore_snapshot.sh
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 
 # Link volume models to local folder
-RUN rm -rf models && ln -s /workspace/models models
+RUN rm -rf models && ln -s /workspace/models ./
 
 # Start container
 CMD ["/start.sh"]

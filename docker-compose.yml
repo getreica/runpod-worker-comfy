@@ -1,13 +1,16 @@
 services:
   comfyui-worker:
-    image: timpietruskyblibla/runpod-worker-comfy:3.4.0-sdxl
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: timpietruskyblibla/runpod-worker-comfy:3.4.0-sdxl
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
     environment:
       - SERVE_API_LOCALLY=true
     ports:
