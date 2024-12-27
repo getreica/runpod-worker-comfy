@@ -70,7 +70,7 @@ if __name__ == "__main__":
         raise ValueError('Github token is missing')
     
     # Get Workflow
-    workflow_path = os.path.join( '/', 'src', 'workflows', f'version_{args.version}.json')
+    workflow_path = os.path.join( '/', 'snapshots', f'version_{args.version}.json')
 
     print(f"Workflow path: {workflow_path}")
     
