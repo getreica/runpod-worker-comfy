@@ -66,7 +66,7 @@ jobs:
         env:
           DOCKERHUB_REPO: ${{ env.DOCKERHUB_REPO }}
           DOCKERHUB_IMG: ${{ env.DOCKERHUB_IMG }}
-          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          VERSION: ${{ env.VERSION }}
           HUGGINGFACE_ACCESS_TOKEN: ${{ env.HUGGINGFACE_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
