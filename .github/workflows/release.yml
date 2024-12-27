@@ -60,15 +60,15 @@ jobs:
           echo "VERSION=${{ vars.VERSION }}" >> $GITHUB_ENV
 
       - name: Build and push the images to Docker Hub
-        uses: docker/bake-action@v2
+        uses: docker/bake-action@v5
         with:
           push: true
-          set: |
-            *.args.DOCKERHUB_REPO=${{ env.DOCKERHUB_REPO }}
-            *.args.DOCKERHUB_IMG=${{ env.DOCKERHUB_IMG }}
-            *.args.RELEASE_VERSION=${{ env.RELEASE_VERSION }}
-            *.args.HUGGINGFACE_ACCESS_TOKEN=${{ env.HUGGINGFACE_ACCESS_TOKEN }}
-            *.args.GITHUB_TOKEN=${{ env.GITHUB_TOKEN }}
+        env:
+          DOCKERHUB_REPO: ${{ env.DOCKERHUB_REPO }}
+          DOCKERHUB_IMG: ${{ env.DOCKERHUB_IMG }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          HUGGINGFACE_ACCESS_TOKEN: ${{ env.HUGGINGFACE_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
       - name: Update description on Docker Hub
         uses: peter-evans/dockerhub-description@v3
