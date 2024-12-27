@@ -60,7 +60,6 @@ jobs:
           echo "VERSION=${{ vars.VERSION }}" >> $GITHUB_ENV
 
       - name: Build and push the images to Docker Hub
-        if: steps.semanticrelease.outputs.new-release-published == 'true'
         uses: docker/bake-action@v2
         with:
           push: true
@@ -72,7 +71,6 @@ jobs:
             *.args.GITHUB_TOKEN=${{ env.GITHUB_TOKEN }}
 
       - name: Update description on Docker Hub
-        if: steps.semanticrelease.outputs.new-release-published == 'true'
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
