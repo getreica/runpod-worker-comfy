@@ -64,11 +64,11 @@ jobs:
         with:
           push: true
         env:
-          DOCKERHUB_REPO: ${{ env.DOCKERHUB_REPO }}
-          DOCKERHUB_IMG: ${{ env.DOCKERHUB_IMG }}
-          VERSION: ${{ env.VERSION }}
-          HUGGINGFACE_ACCESS_TOKEN: ${{ env.HUGGINGFACE_ACCESS_TOKEN }}
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          DOCKERHUB_REPO: ${{ vars.DOCKERHUB_REPO }}
+          DOCKERHUB_IMG: ${{ vars.DOCKERHUB_IMG }}
+          VERSION: ${{ vars.VERSION }}
+          HUGGINGFACE_ACCESS_TOKEN: ${{ secrets.HUGGINGFACE_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BLIBLA_SEMANTIC_RELEASE }}
 
       - name: Update description on Docker Hub
         uses: peter-evans/dockerhub-description@v3
