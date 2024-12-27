@@ -2,7 +2,8 @@
 
 set -e
 
-SNAPSHOT_FILE=$(ls /*snapshot*.json 2>/dev/null | head -n 1)
+# take the latest snapshot file found in the /snapshots directory and restore it
+SNAPSHOT_FILE=$(ls -1t /snapshots/*snapshot*.json 2>/dev/null | head -n 1)
 
 if [ -z "$SNAPSHOT_FILE" ]; then
     echo "runpod-worker-comfy: No snapshot file found. Exiting..."
