@@ -2,16 +2,13 @@
 
 set -e
 
-# take the latest snapshot file found in the /snapshots directory and restore it
-SNAPSHOT_FILE=$(ls -1t /snapshots/*snapshot*.json 2>/dev/null | head -n 1)
-
-if [ -z "$SNAPSHOT_FILE" ]; then
-    echo "runpod-worker-comfy: No snapshot file found. Exiting..."
+if [ -z "$GITHUB_TOKEN" ]; then
+    echo "runpod-worker-comfy: No GITHUB_TOKEN found. "
     exit 0
 fi
 
-echo "runpod-worker-comfy: restoring snapshot: $SNAPSHOT_FILE"
+echo "runpod-worker-comfy: restoring snapshot"
 
-comfy --workspace /comfyui node restore-snapshot "$SNAPSHOT_FILE" --pip-non-url
+python3 /comfyui/download_assets.py --version $VERSION --github_token $GITHUB_TOKEN
 
-echo "runpod-worker-comfy: restored snapshot file: $SNAPSHOT_FILE"
+echo "runpod-worker-comfy: restored snapshot successfully"

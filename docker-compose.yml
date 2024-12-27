@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # image: timpietruskyblibla/runpod-worker-comfy:3.4.0-sdxl
     # deploy:
     #   resources:
     #     reservations:
@@ -11,8 +10,8 @@ services:
     #         - driver: nvidia
     #           count: all
     #           capabilities: [gpu]
-    environment:
-      - SERVE_API_LOCALLY=true
+    env_file:
+      - .env
     ports:
       - "8000:8000"
       - "8188:8188"
