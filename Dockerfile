@@ -46,7 +46,7 @@ ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
 RUN chmod +x /start.sh /restore_snapshot.sh
 
 # Copy the restore snapshot files to the comfyui folder
-ADD restore-snapshot/* /comfyui/
+ADD restore-snapshot/* /comfyui/ 
 
 # Install all nodes
 RUN /restore_snapshot.sh
