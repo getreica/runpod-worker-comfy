@@ -1,5 +1,5 @@
 # Stage 1: Base image with common dependencies
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS base
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -23,6 +23,10 @@ RUN apt-get update && apt-get install -y \
 # Clean up to reduce image size
 RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
+#
+#  Stage 2: Install ComfyUI and RunPod
+#
+
 # Install comfy-cli
 RUN pip install comfy-cli
 
@@ -32,32 +36,56 @@ RUN /usr/bin/yes | comfy --workspace /comfyui install --cuda-version 11.8 --nvid
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 
+#
+#   Stage 3: Install RunPod and dependencies
+#
+
 # Install runpod
 RUN pip install runpod requests
 
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
 
+#
+#   Stage 4: Add scripts and copy files
+
+
 # Go back to the root
 WORKDIR /
 
 # Add scripts
-ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
+ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py ./
 RUN chmod +x /start.sh /restore_snapshot.sh
 
 # Copy the restore snapshot files to the comfyui folder
 RUN mkdir -p /snapshots
 ADD snapshots/* /snapshots/
-ADD restore-snapshot/* /comfyui/ 
+ADD restore-snapshot/* /comfyui/
 
-# Install all nodes
-RUN /restore_snapshot.sh
+# Accept build arguments
+ARG GITHUB_TOKEN
+ARG VERSION
+ARG SERVE_API_LOCALLY
+
+# Set environment variables
+ENV GITHUB_TOKEN=${GITHUB_TOKEN}
+ENV VERSION=${VERSION}
+ENV SERVE_API_LOCALLY=${SERVE_API_LOCALLY}
+
+# Echo environment variables    
+RUN echo "SERVE_API_LOCALLY=${SERVE_API_LOCALLY}" && echo "GITHUB_TOKEN=${GITHUB_TOKEN}" && echo "VERSION=${VERSION}"
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 
+# Install all nodes
+RUN /restore_snapshot.sh
+
 # Link volume models to local folder
 RUN rm -rf models && ln -s /workspace/models ./
 
-# Start container
+# Network port for RunPod API
+EXPOSE 8188
+
+# Set te default command to execute when container starts
 CMD ["/start.sh"]

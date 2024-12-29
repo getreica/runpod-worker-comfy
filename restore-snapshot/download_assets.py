@@ -10,7 +10,7 @@ class DownloadAssets:
         self.extensions = ['.pth', '.safetensors', '.bin', '.sft']
         self.token = token
         # Directory where to download the custom nodes
-        self.custom_nodes_dir = f"${BASE_COMFYUI_PATH}/custom_nodes"
+        self.custom_nodes_dir = f"{BASE_COMFYUI_PATH}/custom_nodes"
         # ComfyUI nodes repository
         self.remote_nodes_list = 'https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/refs/heads/main/extension-node-map.json'
 
@@ -24,8 +24,11 @@ class DownloadAssets:
     def download_nodes(self):        
         # Get URL list to download
         try:
+            print(f"--------------- Downloading nodes from {self.remote_nodes_list}")
             github_repos = get_custom_nodes_to_download(self.workflow_path, self.remote_nodes_list, self.token)
+            print(f"--------------- Downloading nodes from {self.custom_nodes_dir}")
             github_repos = get_github_commit_hashes(github_repos, self.custom_nodes_dir, self.token)
+            print(f"--------------- Downloading nodes from {self.custom_nodes_dir}")
             download_repositories( github_repos, self.custom_nodes_dir, self.token )
         except Exception as e:
             raise Exception(f"!!!!!! download_nodes issue: {e}")
@@ -33,14 +36,14 @@ class DownloadAssets:
     
     # Start node download
     def start(self):
-        print(f"\nStart downloading nodes")
+        print(f"\n --------------- --------------- Start downloading nodes")
         start_time = time.time()
 
         # Run the async download
         self.download_nodes()
 
         end_time = time.time()
-        print(f"\nTotal download time: {end_time - start_time:.2f} seconds")
+        print(f"\n --------------- --------------- Total download time: {end_time - start_time:.2f} seconds")
 
 
 #
@@ -55,8 +58,8 @@ if __name__ == "__main__":
     parser.add_argument('--version', action="store", dest='version', default="01")
     parser.add_argument('--github_token', action="store", dest='github_token', default="")
     
-    models_dir = f"${BASE_COMFYUI_PATH}/models"
-    custom_nodes_dir = f"${BASE_COMFYUI_PATH}/custom_nodes"
+    models_dir = f"{BASE_COMFYUI_PATH}/models"
+    custom_nodes_dir = f"{BASE_COMFYUI_PATH}/custom_nodes"
 
     # Now, parse the command line arguments and store the 
     # values in the `args` variable

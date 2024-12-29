@@ -24,4 +24,9 @@ target "base" {
   target = "base"
   platforms = ["linux/amd64"]
   tags = ["${DOCKERHUB_REPO}/${DOCKERHUB_IMG}:${VERSION}"]
+  args = {
+    SERVE_API_LOCALLY ="${SERVE_API_LOCALLY}"
+    GITHUB_TOKEN = "${GITHUB_TOKEN}"
+    VERSION = "${VERSION}"
+  }
 }

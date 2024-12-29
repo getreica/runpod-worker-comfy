@@ -10,9 +10,11 @@ services:
     #         - driver: nvidia
     #           count: all
     #           capabilities: [gpu]
+    env_file:
+      - .env
     ports:
       - "8000:8000"
       - "8188:8188"
     volumes:
-      - ./data/comfyui/output:/comfyui/output
-      - ./data/runpod-volume:/runpod-volume
+      - /Users/alexgenovese/Desktop/runpod/output:/comfyui/output
+      - /Users/alexgenovese/Desktop/runpod/volume:/runpod-volume
