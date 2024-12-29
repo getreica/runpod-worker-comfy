@@ -3,17 +3,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: all
-    #           capabilities: [gpu]
-    env_file:
-      - .env
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - SERVE_API_LOCALLY=${{ env.SERVE_API_LOCALLY }}
+      - GITHUB_TOKEN=${{ env.GITHUB_TOKEN }}
+      - HUGGINGFACE_ACCESS_TOKEN=${{ env.HUGGINGFACE_ACCESS_TOKEN }}
+      - VERSION=${{ env.VERSION }}
     ports:
-      - "8000:8000"
       - "8188:8188"
     volumes:
       - /Users/alexgenovese/Desktop/runpod/output:/comfyui/output
