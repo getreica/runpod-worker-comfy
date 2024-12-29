@@ -11,10 +11,10 @@ services:
               count: all
               capabilities: [gpu]
     environment:
-      - SERVE_API_LOCALLY=${{ env.SERVE_API_LOCALLY }}
-      - GITHUB_TOKEN=${{ env.GITHUB_TOKEN }}
-      - HUGGINGFACE_ACCESS_TOKEN=${{ env.HUGGINGFACE_ACCESS_TOKEN }}
-      - VERSION=${{ env.VERSION }}
+      - SERVE_API_LOCALLY=false
+      - GITHUB_TOKEN=${ secrets.BLIBLA_SEMANTIC_RELEASE }
+      - HUGGINGFACE_ACCESS_TOKEN=${ secrets.HUGGINGFACE_ACCESS_TOKEN }
+      - VERSION=${ vars.VERSION }
     ports:
       - "8188:8188"
     volumes:
