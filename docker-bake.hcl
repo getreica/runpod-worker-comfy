@@ -25,7 +25,7 @@ target "base" {
   platforms = ["linux/amd64"]
   tags = ["${DOCKERHUB_REPO}/${DOCKERHUB_IMG}:${VERSION}"]
   args = {
-    GITHUB_TOKEN = "${GITHUB_TOKEN}"
+    GITHUB_TOKEN = "${BLIBLA_SEMANTIC_RELEASE}"
     VERSION = "${VERSION}"
     HUGGINGFACE_ACCESS_TOKEN = "${HUGGINGFACE_ACCESS_TOKEN}"
   }
