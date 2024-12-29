@@ -1,73 +1,70 @@
-# Runpod Serverless ComfyUI Worker 
+# 🚀 Runpod Serverless ComfyUI Worker
 
-> [ComfyUI](https://github.com/comfyanonymous/ComfyUI) as a serverless API on [RunPod](https://www.runpod.io/)
+> Transform ComfyUI into a powerful and scalable serverless API with RunPod
 
-**[ Build step ]**
-- Install Cuda and Python libraries and clean to remove unused files
-- Download ComfyUI in /comfyui
-- Read the embedded workflow in the /snapshots folder and 
-- - download all nodes and found in JSON workflow in custom_nodes folders in /comfyui
-- Link /workspace/models to /comfyui/models (here you can add your own models)
+## 🏗️ Architecture
 
+**Core Components**
+- 🎯 ComfyUI as processing backend
+- ☁️ RunPod for serverless deployment
+- 🔄 Customizable workflow system
+- 📦 Flexible model management
 
-**[ Running step ]**
-- Start ComfyUI ready for the inference
-- Load the workflow from /snapshots folder
-- - identify all nodes with the class_type "ComfyUIDeployExternal" as input variables
-- - merge the JSON with the input request
-- - queue the workflow 
-- Start the inference 
+## 🛠️ Setup & Installation
 
+### Prerequisites
+- `/workspace/models` directory configured with required models
+- Access tokens for Huggingface and GitHub
+- JSON workflow in `/snapshots` folder
 
-## Request to send
+### Automated Build
+```bash
+# Step 1: Dependencies Installation
+└── CUDA + Python libraries
+
+# Step 2: ComfyUI Setup
+└── Download to /comfyui
+    └── Custom nodes installation
+    └── Models linking: /workspace/models ➔ /comfyui/models
 ```
+
+## 🎮 Usage
+
+### Request Format
+```json
 {
-    "webhook": "https://webhooks.getreica.com",
-    "request" :{
-        "image" : "https://placehold.co/600x400",
-        "chiave_comfydeploy_image_nel_workflow" : 12,
-        "chiave_valore_intero" : 123,
-        "chiave_valore_testo" : "ciao",
-        "chiave_valore_float" : 23.50,
-        "chiave_image_batch" : [ "image.jpg", "asdcas.jpgg"],
-        "chiave_boolean" : false
+    "webhook": "https://webhooks.yourwebsite.com",
+    "request": {
+        "image": "https://placehold.co/600x400",
+        "comfydeploy_image_key_in_workflow": 12,
+        "integer_value_key": 123,
+        "text_value_key": "hello",
+        "float_value_key": 23.50,
+        "image_batch_key": ["image.jpg", "asdcas.jpgg"],
+        "boolean_key": false
     }
 }
-
 ```
 
-## ⚠ MODELS folder must be downloaded before starting ⚠
-A requirements to start this docker is to pre-download all models of ComfyUI into **/workspace/models** – I usually use Cloud Sync to update consistenly and avoid issue or duplications.
+## ⚙️ Configuration
 
+### Essential Environment Variables
+| Variable | Description | Example |
+|----------|-------------|---------|
+| VERSION | Workflow/endpoint version | `'01'` |
+| HUGGINGFACE_ACCESS_TOKEN | Huggingface token | `'hf_xxxxxx'` |
+| GITHUB_TOKEN | GitHub token | `'github_pat_xxxxx'` |
 
-## ENVIRONMENT VARIABLES TO BUILD
-- VERSION: the version of the workflow to load
-- VERSION: the version of the endpoint
-- HUGGINGFACE_ACCESS_TOKEN: the token to login into Huggingface
-- GITHUB_TOKEN: the token to login into Github
+## ⚠️ Important Notes
+- Pre-download all models to `/workspace/models`
+- Use Cloud Sync for model synchronization
+- Verify custom nodes compatibility
 
+## 🤝 Credits & Community
+- 🔧 [ComfyUIDeploy](https://github.com/BennyKok/comfyui-deploy)
+- 🎨 [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
+- ☁️ [RunPod](https://www.runpod.io/)
+- 🛠️ [BLIB-LA](https://github.com/blib-la/runpod-worker-comfy)
 
-## ENVIRONMENT VARIABLES FOR GITHUB ACTION
-
-The **VERSION** manage different workflow versions you store into /snapshots. This is helpful to move forward or rollback to the prev version easily. 
-```
-VERSION='01'
-```
------
-
-**HUGGINGFACE_ACCESS_TOKEN** is used to download the models from Huggingface in case some nodes need it.
-```
-HUGGINGFACE_ACCESS_TOKEN='hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-```
------
-
-**GITHUB_TOKEN** is used to download the nodes from Github all nodes found in the JSON workflow file.
-```
-GITHUB_TOKEN='github_pat_11AADHOQI0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-```
-
-## Credits 
-- [ComfyUIDeploy](https://github.com/BennyKok/comfyui-deploy) for the nodes
-- [ComfyUI](https://github.com/comfyanonymous/ComfyUI) for the ComfyUI
-- [RunPod](https://www.runpod.io/) for the serverless API
-- [BLIB-LA](https://github.com/blib-la/runpod-worker-comfy) for the RunPod Serverless ComfyUI Worker 
+---
+*Powered by RunPod Serverless - Deploy, Scale, Create*
