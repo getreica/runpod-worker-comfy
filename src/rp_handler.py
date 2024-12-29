@@ -371,7 +371,7 @@ def handler(job_input):
 
     # Read JSON object
     endpoint_version = os.environ['VERSION']
-    workflow = json.load(os.path.join("/", "snapshots", f"version_{endpoint_version}.json"))
+    workflow = json.load(os.path.join("/", "workflows", f"version_{endpoint_version}.json"))
     print(f"--- Reading workflow file in {workflow}")
 
     # Extract all nodes with of ComfyDeploy Class

@@ -15,7 +15,7 @@
 ### Prerequisites
 - `/workspace/models` directory configured with required models
 - Access tokens for Huggingface and GitHub
-- JSON workflow in `/snapshots` folder
+- JSON workflow in `/workflows` folder
 
 ### Automated Build
 ```bash

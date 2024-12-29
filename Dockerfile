@@ -1,5 +1,12 @@
 # Stage 1: Base image with common dependencies
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+# FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+ARG CUDA_VERSION="12.1.1"
+ARG CUDNN_VERSION="8"
+ARG UBUNTU_VERSION="22.04"
+ARG DOCKER_FROM=nvidia/cuda:$CUDA_VERSION-cudnn$CUDNN_VERSION-devel-ubuntu$UBUNTU_VERSION   
+
+# Base NVidia CUDA Ubuntu image
+FROM $DOCKER_FROM AS base
 
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -31,7 +38,7 @@ RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 RUN pip install comfy-cli
 
 # Install ComfyUI
-RUN /usr/bin/yes | comfy --workspace /comfyui install --cuda-version 11.8 --nvidia --version 0.2.7
+RUN /usr/bin/yes | comfy --workspace /comfyui install --cuda-version 12.1 --nvidia --version 0.3.10
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
@@ -57,19 +64,20 @@ WORKDIR /
 ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py ./
 RUN chmod +x /start.sh /restore_snapshot.sh
 
-# Copy the restore snapshot files to the comfyui folder
-RUN mkdir -p /snapshots
-ADD snapshots/* /snapshots/
-ADD restore-snapshot/* /comfyui/
+# Copy the workflows to the root folder
+RUN mkdir -p /workflows
+ADD workflows/* /workflows/
 
 # Accept build arguments
 ARG GITHUB_TOKEN
 ARG VERSION
+ARG HUGGINGFACE_ACCESS_TOKEN
 ARG SERVE_API_LOCALLY
 
 # Set environment variables
 ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 ENV VERSION=${VERSION}
+ENV HUGGINGFACE_ACCESS_TOKEN=${HUGGINGFACE_ACCESS_TOKEN}
 ENV SERVE_API_LOCALLY=${SERVE_API_LOCALLY}
 
 # Echo environment variables    
@@ -78,6 +86,8 @@ RUN echo "SERVE_API_LOCALLY=${SERVE_API_LOCALLY}" && echo "GITHUB_TOKEN=${GITHUB
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 
+# Files to download nodes
+ADD restore-snapshot/* /comfyui/
 # Install all nodes
 RUN /restore_snapshot.sh
 
