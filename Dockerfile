@@ -1,5 +1,6 @@
+#
 # Stage 1: Base image with common dependencies
-# FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+#
 ARG CUDA_VERSION="12.1.1"
 ARG CUDNN_VERSION="8"
 ARG UBUNTU_VERSION="22.04"
