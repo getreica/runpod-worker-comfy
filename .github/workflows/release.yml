@@ -41,7 +41,7 @@ jobs:
           context: .
           push: true
           tags: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:0.0.1 
-          secrets: |
-            "GITHUB_TOKEN=${{ secrets.BLIBLA_SEMANTIC_RELEASE }}" 
-            "HUGGINGFACE_ACCESS_TOKEN=${{ secrets.HUGGINGFACE_ACCESS_TOKEN }}" 
-            "VERSION=${{ vars.VERSION }}"
+          build-args: |
+            GITHUB_TOKEN=${{ secrets.BLIBLA_SEMANTIC_RELEASE }}
+            HUGGINGFACE_ACCESS_TOKEN=${{ secrets.HUGGINGFACE_ACCESS_TOKEN }}
+            VERSION=${{ vars.VERSION }}
